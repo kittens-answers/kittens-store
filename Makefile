@@ -1,4 +1,4 @@
-all: isort black lint test
+all: isort black lint test bandit
 lint:
 	flake8 .
 black:
@@ -7,3 +7,5 @@ isort:
 	isort .
 test:
 	pytest
+bandit:
+	bandit -r kittens_store/
