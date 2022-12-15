@@ -1,5 +1,5 @@
-from dataclasses import dataclass
 import json
+from dataclasses import dataclass
 
 
 @dataclass
@@ -53,5 +53,6 @@ def data_iter():
                         is_correct=answer["is_correct"],
                         is_full=is_full,
                     )
+
 
 data = list(data_iter())

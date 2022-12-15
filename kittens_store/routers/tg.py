@@ -1,10 +1,9 @@
-from dataclasses import dataclass
-
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse
 
-from kittens_store.templates import templates
 from kittens_store.data import data
+from kittens_store.templates import templates
+
 router = APIRouter()
 
 

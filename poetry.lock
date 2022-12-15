@@ -392,17 +392,6 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
-name = "pyngrok"
-version = "5.1.0"
-description = "A Python wrapper for ngrok."
-category = "dev"
-optional = false
-python-versions = ">=3.5"
-
-[package.dependencies]
-PyYAML = "*"
-
-[[package]]
 name = "pyparsing"
 version = "3.0.9"
 description = "pyparsing module - Classes and methods to define and execute parsing grammars"
@@ -632,7 +621,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "31cb03e546640f627bc3677e9e29fba9f7532f5b5763d3b4387afef03c065f2f"
+content-hash = "bc733fd749fa1481837e8419c0887e325d330e6cc1075e06c8f55db00c742e06"
 
 [metadata.files]
 anyio = []
@@ -693,7 +682,6 @@ py = [
 pycodestyle = []
 pydantic = []
 pyflakes = []
-pyngrok = []
 pyparsing = [
     {file = "pyparsing-3.0.9-py3-none-any.whl", hash = "sha256:5026bae9a10eeaefb61dab2f09052b9f4307d44aee4eda64b309723d8d206bbc"},
     {file = "pyparsing-3.0.9.tar.gz", hash = "sha256:2b020ecf7d21b687f219b71ecad3631f644a47f01403fa1d1036b0c6416d70fb"},
