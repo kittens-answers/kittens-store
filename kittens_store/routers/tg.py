@@ -3,8 +3,14 @@ from fastapi.responses import HTMLResponse
 
 from kittens_store.data import data
 from kittens_store.templates import templates
+from kittens_store.bot.config import settings
 
 router = APIRouter()
+
+@router.post(f"/{settings.TG_TOKEN}", include_in_schema=False)
+async def update(request: Request):
+    print(await request.json())
+    return "ok"
 
 
 @router.get("/search", response_class=HTMLResponse)
@@ -14,7 +20,7 @@ async def menu(request: Request):
 
 @router.post("/search", response_class=HTMLResponse)
 async def test(request: Request, q: str = Form(), initData: str = Form(default="")):
-    questions = [qu for qu in data if q in qu.question]
+    questions = [qu for qu in data if q.lower() in qu.question.lower()]
     return templates.TemplateResponse(
         "item.html", {"request": request, "questions": questions}
     )
@@ -22,5 +28,4 @@ async def test(request: Request, q: str = Form(), initData: str = Form(default="
 
 @router.post("/close", response_class=HTMLResponse)
 async def close(request: Request, q_id: str = Form()):
-    print(q_id)
     return templates.TemplateResponse("close.html", {"request": request})
