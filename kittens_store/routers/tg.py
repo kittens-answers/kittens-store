@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Form, Request, Depends
+from fastapi import APIRouter, Form, Request, Depends, FastAPI
 from fastapi.responses import HTMLResponse
 
 from kittens_store.data import data
@@ -33,3 +33,8 @@ async def test(request: Request, q: str = Form(), initData: str = Form(default="
 @router.post("/close", response_class=HTMLResponse)
 async def close(request: Request, q_id: str = Form()):
     return templates.TemplateResponse("close.html", {"request": request})
+
+@router.get("/dom", name="dom")
+async def domain(request: Request):
+    app: FastAPI = request.app
+    return app.url_path_for("dom")
