@@ -37,4 +37,5 @@ async def close(request: Request, q_id: str = Form()):
 @router.get("/dom", name="dom")
 async def domain(request: Request):
     app: FastAPI = request.app
-    return app.url_path_for("dom")
+    
+    return f"{app.url_path_for('dom')} {request.url}"
