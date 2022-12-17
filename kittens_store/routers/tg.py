@@ -1,15 +1,19 @@
-from fastapi import APIRouter, Form, Request
+from fastapi import APIRouter, Form, Request, Depends
 from fastapi.responses import HTMLResponse
 
 from kittens_store.data import data
 from kittens_store.templates import templates
 from kittens_store.bot.config import settings
-
+from kittens_store.bot import TG_App
+from kittens_store.dependency import tg_depend
+from telegram import Update
 router = APIRouter()
 
+
 @router.post(f"/{settings.TG_TOKEN}", include_in_schema=False)
-async def update(request: Request):
-    print(await request.json())
+async def update(request: Request, tg: TG_App = Depends(tg_depend)):
+    json = await request.json()
+    await tg.tg_app.process_update(Update.de_json(data=json, bot=tg.tg_app.bot))
     return "ok"
 
 

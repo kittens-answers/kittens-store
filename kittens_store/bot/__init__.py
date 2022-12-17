@@ -53,3 +53,4 @@ class TG_App:
 def init_tg_app(app: FastAPI):
     tg_app = TG_App()
     app.add_event_handler("startup", tg_app.init)
+    app.state.tg_app = tg_app
