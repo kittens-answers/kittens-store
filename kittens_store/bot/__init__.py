@@ -45,7 +45,7 @@ class TG_App:
 
     async def init(self):
         res = await self.tg_app.bot.set_webhook(
-            url=f"https://store.kittensanswers.ru/tg/{settings.TG_TOKEN}"
+            url=f"https://arya.kittensanswers.ru/tg/{settings.TG_TOKEN}"
         )
         print(f"web hook set: {res}")
 
