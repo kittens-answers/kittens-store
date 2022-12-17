@@ -43,14 +43,19 @@ class TG_App:
         self.tg_app = get_app(test_mode=True)
         self.tg_app.add_handler(CommandHandler("start", start))
 
-    async def init(self):
+    async def startup(self):
+        await self.tg_app.initialize()
         res = await self.tg_app.bot.set_webhook(
             url=f"https://arya.kittensanswers.ru/tg/{settings.TG_TOKEN}"
         )
         print(f"web hook set: {res}")
 
+    async def shutdown(self):
+        await self.tg_app.shutdown()
+
 
 def init_tg_app(app: FastAPI):
     tg_app = TG_App()
-    app.add_event_handler("startup", tg_app.init)
+    app.add_event_handler("startup", tg_app.startup)
+    app.add_event_handler("shutdown", tg_app.shutdown)
     app.state.tg_app = tg_app
