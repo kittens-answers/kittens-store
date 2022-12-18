@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Form, Request, Depends, FastAPI
+from fastapi import APIRouter, Form, Request, Depends, Response
 from fastapi.responses import HTMLResponse
 
 from kittens_store.data import data
@@ -7,6 +7,7 @@ from kittens_store.bot.config import settings
 from kittens_store.bot import TG_App
 from kittens_store.dependency import tg_depend
 from telegram import Update
+
 router = APIRouter()
 
 
@@ -34,8 +35,7 @@ async def test(request: Request, q: str = Form(), initData: str = Form(default="
 async def close(request: Request, q_id: str = Form()):
     return templates.TemplateResponse("close.html", {"request": request})
 
-@router.get("/dom", name="dom")
-async def domain(request: Request):
-    app: FastAPI = request.app
-    
-    return f"{app.url_path_for('dom')} {request.url}"
+@router.get("/test-close")
+async def test_close(request: Request, response: Response):
+    response.headers["HX-Trigger"] = "closeTG"
+    return "ok"
