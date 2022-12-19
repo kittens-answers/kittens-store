@@ -25,12 +25,11 @@ def get_app(test_mode: bool = False):
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    print("start")
     assert update.effective_chat
     await context.bot.setChatMenuButton(
         chat_id=update.effective_chat.id,
         menu_button=MenuButtonWebApp(
-            text="menu", web_app=WebAppInfo(url=settings.urls.menu)
+            text="menu", web_app=WebAppInfo(url=settings.search_url)
         ),
     )
     await context.bot.send_message(
@@ -40,14 +39,12 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 class TG_App:
     def __init__(self) -> None:
-        self.tg_app = get_app(test_mode=True)
+        self.tg_app = get_app(test_mode=False)
         self.tg_app.add_handler(CommandHandler("start", start))
 
     async def startup(self):
         await self.tg_app.initialize()
-        res = await self.tg_app.bot.set_webhook(
-            url=f"https://arya.kittensanswers.ru/tg/{settings.TG_TOKEN}"
-        )
+        res = await self.tg_app.bot.set_webhook(url=settings.webhook_url)
         print(f"web hook set: {res}")
 
     async def shutdown(self):
