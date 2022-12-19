@@ -40,7 +40,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 class TG_App:
     def __init__(self) -> None:
-        self.tg_app = get_app(test_mode=True)
+        self.tg_app = get_app(test_mode=False)
         self.tg_app.add_handler(CommandHandler("start", start))
 
     async def startup(self):
