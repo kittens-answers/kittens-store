@@ -1,8 +1,4 @@
-from pydantic import BaseModel, BaseSettings
-
-
-class Urls(BaseModel):
-    menu: str
+from pydantic import BaseSettings, Field
 
 
 class Settings(BaseSettings):
@@ -10,7 +6,16 @@ class Settings(BaseSettings):
         env_file = ".env"
 
     TG_TOKEN: str
-    urls: Urls
+    BASE_URL: str
+    TG_TEST_MODE: bool = Field(False)
+
+    @property
+    def search_url(self):
+        return f"{self.BASE_URL}/tg/search"
+
+    @property
+    def webhook_url(self):
+        return f"{self.BASE_URL}/tg/{self.TG_TOKEN}"
 
 
 settings = Settings()  # type: ignore
