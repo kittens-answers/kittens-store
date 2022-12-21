@@ -55,7 +55,7 @@ async def load(
     data_dict = parse_qs(init_data)
     hash_str = data_dict.pop("hash")[0]
     data_check_string = "\n".join(
-        [f"{key}={data_dict[key]}" for key in sorted(data_dict.keys())]
+        [f"{key}={data_dict[key][0]}" for key in sorted(data_dict.keys())]
     )
     secret_key = hmac.new(
         settings.TG_TOKEN.encode(), "WebAppData".encode(), hashlib.sha256
@@ -64,10 +64,4 @@ async def load(
         secret_key, data_check_string.encode(), hashlib.sha3_256
     ).hexdigest()
     check = data_check == hash_str
-    return {
-        "init_data": init_data,
-        "hash_str": hash_str,
-        "data_dict": data_dict,
-        "data_check_string": data_check_string,
-        "check": check,
-    }
+    return check
