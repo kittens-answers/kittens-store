@@ -63,4 +63,11 @@ async def load(
     data_check = hmac.new(
         secret_key, data_check_string.encode(), hashlib.sha3_256
     ).hexdigest()
-    return data_check == hash_str
+    check = data_check == hash_str
+    return {
+        "init_data": init_data,
+        "hash_str": hash_str,
+        "data_dict": data_dict,
+        "data_check_string": data_check_string,
+        "check": check,
+    }
