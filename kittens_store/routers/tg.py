@@ -7,6 +7,9 @@ from kittens_store.bot.config import settings
 from kittens_store.bot import TG_App
 from kittens_store.dependency import tg_depend
 from telegram import Update
+from urllib.parse import parse_qs
+import hashlib
+import hmac
 
 router = APIRouter()
 
@@ -43,8 +46,21 @@ async def test_close(request: Request, response: Response):
 
 
 @router.post("/load")
-async def load(response: Response, initData: str | None = Form(default=None)):
-    if initData is None:
+async def load(
+    response: Response, init_data: str | None = Form(default=None, alias="initData")
+):
+    if init_data is None:
         response.headers["HX-Redirect"] = settings.TG_BOT_URL
         return ""
-    return initData
+    data_dict = parse_qs(init_data)
+    hash_str = data_dict.pop("hash")[0]
+    data_check_string = "\n".join(
+        [f"{key}={data_dict[key]}" for key in sorted(data_dict.keys())]
+    )
+    secret_key = hmac.new(
+        settings.TG_TOKEN.encode(), "WebAppData".encode(), hashlib.sha256
+    ).digest()
+    data_check = hmac.new(
+        secret_key, data_check_string.encode(), hashlib.sha3_256
+    ).hexdigest()
+    return data_check == hash_str
