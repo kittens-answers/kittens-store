@@ -7,7 +7,7 @@ from kittens_store.bot.config import settings
 from kittens_store.bot import TG_App
 from kittens_store.dependency import tg_depend
 from telegram import Update
-from urllib.parse import parse_qs
+from urllib.parse import parse_qsl
 import hashlib
 import hmac
 
@@ -52,21 +52,15 @@ async def load(
     if init_data is None:
         response.headers["HX-Redirect"] = settings.TG_BOT_URL
         return ""
-    data_dict = parse_qs(init_data)
-    print(data_dict)
-    hash_str = data_dict.pop("hash")[0]
-    print(hash_str)
+    init_dict = dict(parse_qsl(init_data))
+    hash_str = init_dict.pop("hash", "")
     data_check_string = "\n".join(
-        [f"{key}={data_dict[key][0]}" for key in sorted(data_dict.keys())]
+        [f"{k}={init_dict[k]}" for k in sorted(init_dict.keys())]
     )
-    print(data_check_string)
     secret_key = hmac.new(
-        settings.TG_TOKEN.encode(), "WebAppData".encode(), hashlib.sha256
+        "WebAppData".encode(), settings.TG_TOKEN.encode(), hashlib.sha256
     ).digest()
-    print(secret_key)
     data_check = hmac.new(
-        secret_key, data_check_string.encode(), hashlib.sha3_256
+        secret_key, data_check_string.encode(), hashlib.sha256
     ).hexdigest()
-    print(data_check)
-    check = data_check == hash_str
-    return check
+    return data_check == hash_str
