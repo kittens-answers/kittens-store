@@ -35,7 +35,13 @@ async def test(request: Request, q: str = Form(), initData: str = Form(default="
 async def close(request: Request, q_id: str = Form()):
     return templates.TemplateResponse("close.html", {"request": request})
 
+
 @router.get("/test-close")
 async def test_close(request: Request, response: Response):
     response.headers["HX-Trigger"] = "closeTG"
     return "ok"
+
+
+@router.get("/load")
+async def load(initData: str = Form()):
+    return initData

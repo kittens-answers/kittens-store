@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Поиск{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container">
+        <form class="box">
+            <input class="input" name="q" hx-post="/tg/search" hx-vals='js:{initData: window.Telegram.WebApp.initData}'
+                hx-target="#result">
+        </form>
+    </div>
+</section>
+<section class="section">
+    <div class="container" id="result">
+    </div>
+</section>
+<script type="text/javascript">
+    document.body.addEventListener("closeTG", function (evt) {
+        Telegram.WebApp.close();
+    })
+</script>
+{% endblock %}
