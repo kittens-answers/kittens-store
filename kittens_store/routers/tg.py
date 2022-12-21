@@ -42,6 +42,6 @@ async def test_close(request: Request, response: Response):
     return "ok"
 
 
-@router.get("/load")
+@router.post("/load")
 async def load(initData: str = Form()):
     return initData

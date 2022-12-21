@@ -1,5 +1,5 @@
 {% extends "base.html" %}
 {% block title %}Поиск{% endblock %}
 {% block content %}
-<div hx-get="/tg/load" hx-trigger="load" hx-vals='js:{initData: window.Telegram.WebApp.initData}'></div>
+<div hx-post="/tg/load" hx-trigger="load" hx-vals='js:{initData: window.Telegram.WebApp.initData}'></div>
 {% endblock %}
