@@ -53,15 +53,20 @@ async def load(
         response.headers["HX-Redirect"] = settings.TG_BOT_URL
         return ""
     data_dict = parse_qs(init_data)
+    print(data_dict)
     hash_str = data_dict.pop("hash")[0]
+    print(hash_str)
     data_check_string = "\n".join(
         [f"{key}={data_dict[key][0]}" for key in sorted(data_dict.keys())]
     )
+    print(data_check_string)
     secret_key = hmac.new(
         settings.TG_TOKEN.encode(), "WebAppData".encode(), hashlib.sha256
     ).digest()
+    print(secret_key)
     data_check = hmac.new(
         secret_key, data_check_string.encode(), hashlib.sha3_256
     ).hexdigest()
+    print(data_check)
     check = data_check == hash_str
     return check
