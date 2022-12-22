@@ -1,11 +1,8 @@
 import logging
-from telegram import Update, Bot, MenuButtonWebApp, WebAppInfo
-from telegram.ext import (
-    ApplicationBuilder,
-    CommandHandler,
-    ContextTypes,
-)
+
 from fastapi import FastAPI
+from telegram import Bot, MenuButtonWebApp, Update, WebAppInfo
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 from kittens_store.bot.config import settings
 

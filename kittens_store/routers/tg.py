@@ -1,15 +1,13 @@
-from fastapi import APIRouter, Form, Request, Depends, Response
+from fastapi import APIRouter, Depends, Form, Request, Response
 from fastapi.responses import HTMLResponse
-
-from kittens_store.data import data
-from kittens_store.templates import templates
-from kittens_store.bot.config import settings
-from kittens_store.bot import TG_App
-from kittens_store.dependency import tg_depend
 from telegram import Update
-from urllib.parse import parse_qsl
-import hashlib
-import hmac
+
+from kittens_store.bot import TG_App
+from kittens_store.bot.config import settings
+from kittens_store.data import data
+from kittens_store.dependencies.init_data import InitData
+from kittens_store.dependency import tg_depend
+from kittens_store.templates import templates
 
 router = APIRouter()
 
@@ -46,21 +44,8 @@ async def test_close(request: Request, response: Response):
 
 
 @router.post("/load")
-async def load(
-    response: Response, init_data: str | None = Form(default=None, alias="initData")
-):
-    if init_data is None:
+async def load(response: Response, init_data: InitData = Depends(InitData)):
+    if init_data.is_valid is None:
         response.headers["HX-Redirect"] = settings.TG_BOT_URL
         return ""
-    init_dict = dict(parse_qsl(init_data))
-    hash_str = init_dict.pop("hash", "")
-    data_check_string = "\n".join(
-        [f"{k}={init_dict[k]}" for k in sorted(init_dict.keys())]
-    )
-    secret_key = hmac.new(
-        "WebAppData".encode(), settings.TG_TOKEN.encode(), hashlib.sha256
-    ).digest()
-    data_check = hmac.new(
-        secret_key, data_check_string.encode(), hashlib.sha256
-    ).hexdigest()
-    return data_check == hash_str
+    return init_data.data
