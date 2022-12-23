@@ -48,9 +48,9 @@ async def test_close(request: Request, response: Response):
 async def load(
     request: Request, response: Response, init_data: InitData = Depends(InitData)
 ):
-    if init_data.is_valid is None:
-        response.headers["HX-Redirect"] = settings.TG_BOT_URL
-        return ""
+    # if init_data.is_valid is None:
+    #     response.headers["HX-Redirect"] = settings.TG_BOT_URL
+    #     return ""
     print(init_data.data)
     return templates.TemplateResponse("test.html", {"request": request})
 
