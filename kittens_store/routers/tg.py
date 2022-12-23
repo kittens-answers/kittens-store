@@ -48,4 +48,5 @@ async def load(response: Response, init_data: InitData = Depends(InitData)):
     if init_data.is_valid is None:
         response.headers["HX-Redirect"] = settings.TG_BOT_URL
         return ""
-    return init_data.data.keys()
+    print(init_data.data)
+    return ""
