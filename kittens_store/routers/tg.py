@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Depends, Form, Request, Response
 from fastapi.responses import HTMLResponse
-from telegram import Update
+from telegram import Update, InlineQueryResultArticle, InputTextMessageContent
 
 from kittens_store.bot import TG_App
 from kittens_store.bot.config import settings
 from kittens_store.data import data
 from kittens_store.dependencies.init_data import InitData
+from kittens_store.dependencies.tg_app import TGApp_Dep
 from kittens_store.dependency import tg_depend
 from kittens_store.templates import templates
 
@@ -49,4 +50,21 @@ async def load(response: Response, init_data: InitData = Depends(InitData)):
         response.headers["HX-Redirect"] = settings.TG_BOT_URL
         return ""
     print(init_data.data)
-    return ""
+    return templates.TemplateResponse("test.html", {"request": request})
+
+
+@router.post("/test-answer")
+async def test_answer(
+    response: Response,
+    tg_app: TGApp_Dep = Depends(TGApp_Dep),
+    init_data: InitData = Depends(InitData),
+):
+    response.headers["HX-Trigger"] = "closeTG"
+    await tg_app.bot.answer_web_app_query(
+        web_app_query_id=init_data.data["query_id"],
+        result=InlineQueryResultArticle(
+            id="4",
+            title="title",
+            input_message_content=InputTextMessageContent(message_text="text"),
+        ),
+    )
