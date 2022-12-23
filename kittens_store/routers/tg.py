@@ -45,7 +45,9 @@ async def test_close(request: Request, response: Response):
 
 
 @router.post("/load")
-async def load(response: Response, init_data: InitData = Depends(InitData)):
+async def load(
+    request: Request, response: Response, init_data: InitData = Depends(InitData)
+):
     if init_data.is_valid is None:
         response.headers["HX-Redirect"] = settings.TG_BOT_URL
         return ""
