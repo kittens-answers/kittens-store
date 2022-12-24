@@ -11,7 +11,9 @@ router = APIRouter()
 @router.get("/menu")
 async def menu(request: Request):
     print("menu")
-    return templates.TemplateResponse("new-menu.html", {"request": request})
+    temp = templates.TemplateResponse("new-menu.html", {"request": request})
+    print(temp)
+    return temp
 
 
 @router.post("/click")
