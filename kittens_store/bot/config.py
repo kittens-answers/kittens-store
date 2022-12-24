@@ -18,5 +18,9 @@ class Settings(BaseSettings):
     def webhook_url(self):
         return f"{self.BASE_URL}/tg/{self.TG_TOKEN}"
 
+    @property
+    def new_tg(self):
+        return f"{self.BASE_URL}/new-tg/menu"
+
 
 settings = Settings()  # type: ignore

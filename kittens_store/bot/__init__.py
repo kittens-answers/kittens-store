@@ -1,7 +1,14 @@
 import logging
 
 from fastapi import FastAPI
-from telegram import Bot, MenuButtonWebApp, Update, WebAppInfo
+from telegram import (
+    Bot,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    MenuButtonWebApp,
+    Update,
+    WebAppInfo,
+)
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 from kittens_store.bot.config import settings
@@ -34,10 +41,22 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
+async def new_tg(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    assert update.effective_chat
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="new",
+        reply_markup=InlineKeyboardMarkup.from_button(
+            InlineKeyboardButton(text="open", web_app=WebAppInfo(url=""))
+        ),
+    )
+
+
 class TG_App:
     def __init__(self) -> None:
         self.tg_app = get_app(test_mode=settings.TG_TEST_MODE)
         self.tg_app.add_handler(CommandHandler("start", start))
+        self.tg_app.add_handler(CommandHandler("new", new_tg))
 
     async def startup(self):
         await self.tg_app.initialize()

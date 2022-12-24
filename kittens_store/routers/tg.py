@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Form, Request, Response
 from fastapi.responses import HTMLResponse
-from telegram import Update, InlineQueryResultArticle, InputTextMessageContent
+from telegram import InlineQueryResultArticle, InputTextMessageContent, Update
 
 from kittens_store.bot import TG_App
 from kittens_store.bot.config import settings
