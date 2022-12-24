@@ -47,7 +47,7 @@ async def new_tg(update: Update, context: ContextTypes.DEFAULT_TYPE):
         chat_id=update.effective_chat.id,
         text="new",
         reply_markup=InlineKeyboardMarkup.from_button(
-            InlineKeyboardButton(text="open", web_app=WebAppInfo(url=""))
+            InlineKeyboardButton(text="open", web_app=WebAppInfo(url=settings.new_tg))
         ),
     )
 
