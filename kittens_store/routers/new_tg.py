@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, Request
 from telegram import InlineQueryResultArticle, InputTextMessageContent
+from fastapi.responses import HTMLResponse
 
 from kittens_store.dependencies.init_data import InitData
 from kittens_store.dependencies.tg_app import TGApp_Dep
@@ -8,7 +9,7 @@ from kittens_store.templates import templates
 router = APIRouter()
 
 
-@router.get("/menu")
+@router.get("/menu", response_class=HTMLResponse)
 async def menu(request: Request):
     print("menu")
     temp = templates.TemplateResponse("new-menu.html", {"request": request})
