@@ -12,7 +12,7 @@ router = APIRouter()
 async def menu(request: Request):
     print("menu")
     temp = templates.TemplateResponse("new-menu.html", {"request": request})
-    print(temp)
+    print(temp.body.decode())
     return temp
 
 
