@@ -15,12 +15,15 @@ router = APIRouter()
 async def menu(
     response: Response, request: Request, init_data: InitData = Depends(InitData)
 ):
+    print(init_data.is_valid)
     if init_data.is_valid is None:
         response.headers["HX-Redirect"] = settings.TG_BOT_URL
         return ""
     if init_data.is_valid is False:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
-    return templates.TemplateResponse("search.html", {"request": request})
+    temp = templates.TemplateResponse("search.html", {"request": request})
+    print(temp.body.decode())
+    return temp
 
 
 @router.post("/search", response_class=HTMLResponse)
