@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Form, Request, Response, status
+from fastapi import APIRouter, Depends, Form, Request, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.exceptions import HTTPException
 
@@ -11,23 +11,22 @@ from kittens_store.bot.config import settings
 router = APIRouter()
 
 
+@router.get("/loader", response_class=HTMLResponse)
+async def loader(request: Request):
+    return templates.TemplateResponse("loader.html", {"request": request})
+
+
 @router.get("/search", response_class=HTMLResponse)
-async def menu(
-    response: Response, request: Request, init_data: InitData = Depends(InitData)
-):
-    print(init_data.is_valid)
+async def menu(request: Request, init_data: InitData = Depends(InitData)):
     if init_data.is_valid is None:
         return RedirectResponse(url=settings.TG_BOT_URL)
     if init_data.is_valid is False:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
-    temp = templates.TemplateResponse("search.html", {"request": request})
-    print(temp.body.decode())
-    return temp
+    return templates.TemplateResponse("search.html", {"request": request})
 
 
 @router.post("/search", response_class=HTMLResponse)
 async def test(
-    response: Response,
     request: Request,
     q: str = Form(),
     init_data: InitData = Depends(InitData),

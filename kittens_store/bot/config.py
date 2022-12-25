@@ -11,8 +11,8 @@ class Settings(BaseSettings):
     TG_BOT_URL: str
 
     @property
-    def search_url(self):
-        return f"{self.BASE_URL}/tg/search"
+    def load_url(self):
+        return f"{self.BASE_URL}/tg/load"
 
     @property
     def webhook_url(self):
