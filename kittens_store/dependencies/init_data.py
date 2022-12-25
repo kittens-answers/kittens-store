@@ -9,6 +9,7 @@ class InitData:
     def __init__(
         self, init_data: str | None = Form(default=None, alias="initData")
     ) -> None:
+        print(init_data)
         if init_data is None:
             self._is_valid = None
             self._data: dict[str, str] = {}
