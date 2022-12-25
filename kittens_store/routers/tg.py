@@ -16,7 +16,7 @@ async def loader(request: Request):
     return templates.TemplateResponse("loader.html", {"request": request})
 
 
-@router.get("/search", response_class=HTMLResponse)
+@router.post("/search", response_class=HTMLResponse)
 async def menu(request: Request, init_data: InitData = Depends(InitData)):
     if init_data.is_valid is None:
         return RedirectResponse(url=settings.TG_BOT_URL)
@@ -25,7 +25,7 @@ async def menu(request: Request, init_data: InitData = Depends(InitData)):
     return templates.TemplateResponse("search.html", {"request": request})
 
 
-@router.post("/search", response_class=HTMLResponse)
+@router.post("/result", response_class=HTMLResponse)
 async def test(
     request: Request,
     q: str = Form(),
