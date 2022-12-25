@@ -12,7 +12,7 @@ class Settings(BaseSettings):
 
     @property
     def load_url(self):
-        return f"{self.BASE_URL}/tg/load"
+        return f"{self.BASE_URL}/tg/loader"
 
     @property
     def webhook_url(self):
