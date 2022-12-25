@@ -1,15 +1,8 @@
-import hashlib
-import hmac
-from typing import Final
-from urllib.parse import parse_qsl
+import json
 
 from fastapi import Form
 
-from kittens_store.bot.config import settings
-
-secret_key: Final = hmac.new(
-    "WebAppData".encode(), settings.TG_TOKEN.encode(), hashlib.sha256
-).digest()
+from kittens_store.bot.web_init_data_check import check
 
 
 class InitData:
@@ -19,21 +12,19 @@ class InitData:
         if init_data is None:
             self._is_valid = None
             self._data: dict[str, str] = {}
+            self._parsed = None
         else:
-            init_dict = dict(parse_qsl(init_data))
-            hash_str = init_dict.pop("hash", "")
-            data_check_string = "\n".join(
-                [f"{k}={init_dict[k]}" for k in sorted(init_dict.keys())]
-            )
-            data_check = hmac.new(
-                secret_key, data_check_string.encode(), hashlib.sha256
-            ).hexdigest()
-            self._is_valid = data_check == hash_str
-            self._data = init_dict
+            self._is_valid, self._data = check(init_data=init_data)
+            self._parsed = None
 
     @property
-    def data(self):
-        return self._data.copy()
+    def query_id(self):
+        return self._data["query_id"]
+
+    @property
+    def user_id(self):
+        user = self._data["user"]
+        return int(json.loads(user)["id"])
 
     @property
     def is_valid(self):
