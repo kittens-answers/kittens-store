@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Form, Request, status
+from fastapi import APIRouter, Depends, Form, Request, status, Response
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.exceptions import HTTPException
 
@@ -17,9 +17,12 @@ async def loader(request: Request):
 
 
 @router.post("/search", response_class=HTMLResponse)
-async def menu(request: Request, init_data: InitData = Depends(InitData)):
+async def menu(
+    response: Response, request: Request, init_data: InitData = Depends(InitData)
+):
     if init_data.is_valid is None:
-        return RedirectResponse(url=settings.TG_BOT_URL)
+        response.headers["HX-Redirect"] = settings.TG_BOT_URL
+        return response
     if init_data.is_valid is False:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     return templates.TemplateResponse("search.html", {"request": request})
@@ -27,12 +30,14 @@ async def menu(request: Request, init_data: InitData = Depends(InitData)):
 
 @router.post("/result", response_class=HTMLResponse)
 async def test(
+    response: Response,
     request: Request,
     q: str = Form(),
     init_data: InitData = Depends(InitData),
 ):
     if init_data.is_valid is None:
-        return RedirectResponse(url=settings.TG_BOT_URL)
+        response.headers["HX-Redirect"] = settings.TG_BOT_URL
+        return response
     if init_data.is_valid is False:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     questions = [qu for qu in data if q.lower() in qu.question.lower()]
