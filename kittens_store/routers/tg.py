@@ -22,7 +22,7 @@ async def menu(
 ):
     if init_data.is_valid is None:
         response.headers["HX-Redirect"] = settings.TG_BOT_URL
-        return response
+        return
     if init_data.is_valid is False:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     return templates.TemplateResponse("search.html", {"request": request})
@@ -37,7 +37,7 @@ async def test(
 ):
     if init_data.is_valid is None:
         response.headers["HX-Redirect"] = settings.TG_BOT_URL
-        return response
+        return
     if init_data.is_valid is False:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     questions = [qu for qu in data if q.lower() in qu.question.lower()]
