@@ -10,8 +10,8 @@ from kittens_store.templates import templates
 router = APIRouter()
 
 
-@router.get("/loader", response_class=HTMLResponse)
-async def loader(request: Request):
+@router.get("/{loader_path:path}", response_class=HTMLResponse)
+async def loader(request: Request, loader_path: str):
     return templates.TemplateResponse("loader.html", {"request": request})
 
 
