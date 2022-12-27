@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Поиск{% endblock %}
+{% block content %}
+<div hx-post="/tg/search" hx-trigger="load" hx-target="#body" hx-swap="afterbegin"
+    hx-vals='js:{initData: window.Telegram.WebApp.initData}'></div>
+{% endblock %}

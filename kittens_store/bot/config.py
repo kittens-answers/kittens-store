@@ -8,10 +8,11 @@ class Settings(BaseSettings):
     TG_TOKEN: str
     BASE_URL: str
     TG_TEST_MODE: bool = Field(False)
+    TG_BOT_URL: str
 
     @property
-    def search_url(self):
-        return f"{self.BASE_URL}/tg/search"
+    def load_url(self):
+        return f"{self.BASE_URL}/tg/loader"
 
     @property
     def webhook_url(self):
