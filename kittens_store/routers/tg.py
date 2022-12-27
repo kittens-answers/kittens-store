@@ -1,12 +1,11 @@
-from fastapi import APIRouter, Depends, Form, Request, status, Response
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi import APIRouter, Depends, Form, Request, Response, status
 from fastapi.exceptions import HTTPException
+from fastapi.responses import HTMLResponse
 
-
+from kittens_store.bot.config import settings
 from kittens_store.data import data
 from kittens_store.dependencies.init_data import InitData
 from kittens_store.templates import templates
-from kittens_store.bot.config import settings
 
 router = APIRouter()
 
