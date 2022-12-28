@@ -1,3 +1,9 @@
+<script>
+    function search() {
+        htmx.trigger("#search-btn", "search-event");
+        alert("Hello World!");
+    }
+</script>
 <section class="section">
     <div class="container">
         <form class="box">
@@ -6,8 +12,8 @@
                     <input name="q" class="input" type="text" placeholder="Поиск в котиках">
                 </p>
                 <p class="control">
-                    <button class="button is-info" hx-post="/tg/result"
-                        hx-vals='js:{initData: window.Telegram.WebApp.initData}' hx-target="#result">
+                    <button id="search-btn" class="button is-info" hx-post="/tg/result" hx-trigger="search-event"
+                        hx-vals='js:{initData: window.Telegram.WebApp.initData}' hx-target="#result" onclick="search()">
                         Поиск
                     </button>
                 </p>
