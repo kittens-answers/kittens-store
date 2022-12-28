@@ -32,6 +32,7 @@ async def test(
     response: Response,
     request: Request,
     q: str = Form(),
+    only_correct: bool = Form(False, alias="only-correct"),
     init_data: InitData = Depends(InitData),
 ):
     if init_data.is_valid is None:
@@ -39,7 +40,12 @@ async def test(
         return
     if init_data.is_valid is False:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
-    questions = [qu for qu in data if q.lower() in qu.question.lower()]
+    if only_correct:
+        questions = [
+            qu for qu in data if q.lower() in qu.question.lower() and qu.is_correct
+        ]
+    else:
+        questions = [qu for qu in data if q.lower() in qu.question.lower()]
     return templates.TemplateResponse(
         "item.html", {"request": request, "questions": questions}
     )
