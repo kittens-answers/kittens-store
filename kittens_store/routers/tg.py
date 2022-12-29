@@ -9,6 +9,29 @@ from kittens_store.templates import templates
 
 router = APIRouter()
 
+from dataclasses import dataclass
+
+
+@dataclass
+class Paginator:
+    has_next: bool
+    has_previous: bool
+    current: int
+    pages: list[int | None]
+
+
+@router.get("/pag", response_class=HTMLResponse)
+async def paginator(request: Request):
+    paginator = Paginator(
+        has_next=True,
+        has_previous=False,
+        current=5,
+        pages=[1, None, 3, 4, 5, 6, None, 12],
+    )
+    return templates.TemplateResponse(
+        "pagination.html", {"request": request, "paginator": paginator}
+    )
+
 
 @router.get("/{loader_path:path}", response_class=HTMLResponse)
 async def loader(request: Request, loader_path: str):

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Поиск{% endblock %}
+{% block content %}
+<nav class="pagination" role="navigation" aria-label="pagination">
+    <div class="pagination-previous {{'is-disabled' if not paginator.has_next }}"><span class="icon">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        </span></div>
+    <div class="pagination-next {{'is-disabled' if not paginator.has_previous }}"><span class="icon">
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+        </span></div>
+    <ul class="pagination-list">
+        {% for page in paginator.pages %}
+        <li>
+            {% if page is none %}
+            <span class="pagination-ellipsis">&hellip;</span>
+            {% else %}
+            <div class="pagination-link {{'is-current' if page == paginator.current }}">{{ page }}</div>
+            {% endif %}
+        </li>
+        {% endfor %}
+</nav>
+{% endblock %}

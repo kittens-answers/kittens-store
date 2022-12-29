@@ -6,7 +6,7 @@
                     <input name="q" class="input" type="text" placeholder="Поиск в котиках">
                 </p>
                 <p class="control">
-                    <button class="button is-info" hx-post="/tg/result"
+                    <button class="button is-info" hx-post="/tg/result" id="search-btn"
                         hx-vals='js:{initData: window.Telegram.WebApp.initData}' hx-target="#result">
                         Поиск
                     </button>
