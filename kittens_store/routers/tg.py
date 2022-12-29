@@ -58,6 +58,12 @@ async def test(
     only_correct: bool = Form(False, alias="only-correct"),
     init_data: InitData = Depends(InitData),
 ):
+    paginator = Paginator(
+        has_next=True,
+        has_previous=False,
+        current=5,
+        pages=[1, None, 3, 4, 5, 6, None, 12],
+    )
     if init_data.is_valid is None:
         response.headers["HX-Redirect"] = settings.TG_BOT_URL
         return
@@ -70,5 +76,6 @@ async def test(
     else:
         questions = [qu for qu in data if q.lower() in qu.question.lower()]
     return templates.TemplateResponse(
-        "item.html", {"request": request, "questions": questions}
+        "item.html",
+        {"request": request, "questions": questions, "paginator": paginator},
     )

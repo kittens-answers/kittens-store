@@ -128,6 +128,7 @@
         </div>
     </div>
 </div>
+{% endfor %}
 <nav class="pagination" role="navigation" aria-label="pagination">
     <div class="pagination-previous {{'is-disabled' if not paginator.has_next }}"><span class="icon">
             <ion-icon name="arrow-back-outline"></ion-icon>
@@ -147,4 +148,3 @@
         </li>
         {% endfor %}
 </nav>
-{% endfor %}
