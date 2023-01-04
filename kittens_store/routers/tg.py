@@ -7,9 +7,10 @@ from kittens_store.data import data
 from kittens_store.dependencies.init_data import InitData
 from kittens_store.templates import templates
 
-router = APIRouter()
 
 from dataclasses import dataclass
+
+router = APIRouter()
 
 
 @dataclass
@@ -58,6 +59,7 @@ async def test(
     only_correct: bool = Form(False, alias="only-correct"),
     init_data: InitData = Depends(InitData),
 ):
+    print(response.body.decode(), q, )
     paginator = Paginator(
         has_next=True,
         has_previous=False,
