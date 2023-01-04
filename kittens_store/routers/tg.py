@@ -89,7 +89,9 @@ async def test(
     else:
         questions = [qu for qu in data if q.lower() in qu.question.lower()]
     print(len(questions))
-    questions = questions[p - 1 * PAGE_SIZE : p * PAGE_SIZE]
+    first_el = (p - 1) * PAGE_SIZE
+    last_el = p * PAGE_SIZE
+    questions = questions[first_el:last_el]
     print(len(questions), questions)
     return templates.TemplateResponse(
         "item.html",
