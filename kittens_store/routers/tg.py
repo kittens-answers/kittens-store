@@ -12,6 +12,7 @@ from dataclasses import dataclass
 
 router = APIRouter()
 
+PAGE_SIZE = 10
 
 @dataclass
 class Paginator:
@@ -19,6 +20,15 @@ class Paginator:
     has_previous: bool
     current: int
     pages: list[int | None]
+
+    @staticmethod
+    def from_current(current: int, total: int):
+        return Paginator(
+            has_next=current < total,
+            has_previous=current < total,
+            current=current,
+            pages=[],
+        )
 
 
 @router.get("/pag", response_class=HTMLResponse)
@@ -56,10 +66,10 @@ async def test(
     response: Response,
     request: Request,
     q: str = Form(),
+    p: int = Form(1),
     only_correct: bool = Form(False, alias="only-correct"),
     init_data: InitData = Depends(InitData),
 ):
-    print(response.body.decode(), q, init_data.user_id)
     paginator = Paginator(
         has_next=True,
         has_previous=False,
@@ -77,6 +87,7 @@ async def test(
         ]
     else:
         questions = [qu for qu in data if q.lower() in qu.question.lower()]
+    questions = questions[p-1*PAGE_SIZE:p*PAGE_SIZE]
     return templates.TemplateResponse(
         "item.html",
         {"request": request, "questions": questions, "paginator": paginator},
