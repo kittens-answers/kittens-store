@@ -14,6 +14,7 @@ router = APIRouter()
 
 PAGE_SIZE = 10
 
+
 @dataclass
 class Paginator:
     has_next: bool
@@ -87,7 +88,9 @@ async def test(
         ]
     else:
         questions = [qu for qu in data if q.lower() in qu.question.lower()]
-    questions = questions[p-1*PAGE_SIZE:p*PAGE_SIZE]
+    print(len(questions))
+    questions = questions[p - 1 * PAGE_SIZE : p * PAGE_SIZE]
+    print(len(questions), questions)
     return templates.TemplateResponse(
         "item.html",
         {"request": request, "questions": questions, "paginator": paginator},
