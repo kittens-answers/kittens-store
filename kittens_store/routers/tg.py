@@ -9,10 +9,9 @@ from kittens_store.templates import templates
 
 
 from dataclasses import dataclass
+from math import ceil
 
 router = APIRouter()
-
-PAGE_SIZE = 10
 
 
 @dataclass
@@ -21,15 +20,23 @@ class Paginator:
     has_previous: bool
     current: int
     pages: list[int | None]
+    page_size: int
 
     @staticmethod
-    def from_current(current: int, total: int):
+    def from_current(current: int, total: int, page_size: int = 10):
+        pages = list(range(1, ceil(total / page_size) + 1))
         return Paginator(
             has_next=current < total,
             has_previous=current < total,
             current=current,
-            pages=[],
+            pages=pages,
+            page_size=page_size,
         )
+
+    def paginate(self, data: list):
+        first_el = (self.current - 1) * self.page_size
+        last_el = self.current * self.page_size
+        return data[first_el:last_el]
 
 
 @router.get("/pag", response_class=HTMLResponse)
@@ -39,6 +46,7 @@ async def paginator(request: Request):
         has_previous=False,
         current=5,
         pages=[1, None, 3, 4, 5, 6, None, 12],
+        page_size=10,
     )
     return templates.TemplateResponse(
         "pagination.html", {"request": request, "paginator": paginator}
@@ -71,12 +79,6 @@ async def test(
     only_correct: bool = Form(False, alias="only-correct"),
     init_data: InitData = Depends(InitData),
 ):
-    paginator = Paginator(
-        has_next=True,
-        has_previous=False,
-        current=5,
-        pages=[1, None, 3, 4, 5, 6, None, 12],
-    )
     if init_data.is_valid is None:
         response.headers["HX-Redirect"] = settings.TG_BOT_URL
         return
@@ -88,12 +90,8 @@ async def test(
         ]
     else:
         questions = [qu for qu in data if q.lower() in qu.question.lower()]
-    print(len(questions))
-    first_el = (p - 1) * PAGE_SIZE
-    last_el = p * PAGE_SIZE
-    print(first_el, last_el)
-    questions = questions[first_el:last_el]
-    print(len(questions), questions)
+    paginator = Paginator.from_current(current=p, total=len(questions))
+    questions = paginator.paginate(questions)
     return templates.TemplateResponse(
         "item.html",
         {"request": request, "questions": questions, "paginator": paginator},
