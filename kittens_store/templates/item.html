@@ -142,12 +142,10 @@
             {% if page is none %}
             <span class="pagination-ellipsis">&hellip;</span>
             {% else %}
-            <div hx-post="/tg/result" hx-target="#result" hx-vals='js:{...htmx.values(htmx.find("#search-btn"))}'
+            <div hx-post="/tg/result" hx-target="#result"
+                hx-vals='js:{initData: window.Telegram.WebApp.initData, ...htmx.values(htmx.find("#search-btn"))}'
                 class="pagination-link {{'is-current' if page == paginator.current }}">{{ page }}</div>
             {% endif %}
         </li>
         {% endfor %}
 </nav>
-<script>
-    alert(...htmx.values(htmx.find("#search-btn")))
-</script>
