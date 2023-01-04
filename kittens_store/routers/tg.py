@@ -91,6 +91,7 @@ async def test(
     print(len(questions))
     first_el = (p - 1) * PAGE_SIZE
     last_el = p * PAGE_SIZE
+    print(first_el, last_el)
     questions = questions[first_el:last_el]
     print(len(questions), questions)
     return templates.TemplateResponse(
